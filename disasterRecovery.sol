@@ -118,35 +118,59 @@ contract assetRegistration{
  */
 contract DisasterRecovery is registration, assetRegistration {
 
-    enum OrderStatus {PROCESSING, PLACED, DISPATCHED, RECIEVED}
+    enum OrderStatus {PROCESSING, PLACED, DISPATCHED, RECIEVED} 
     
     struct order{
         uint256 orderId;
         OrderStatus status;
-        AssetCategory assetCategory;
+        uint256 assetId;
         uint256 qty;
     }
+    
+     uint256 public orderCount = 0;
      
     mapping (uint256 => order) orderIdToOrderMapping;
-    mapping (uint256 => userInfo) orderIdToSupplierMapping;
-    mapping (uint256 => userInfo) orderIdToDistributorMapping;
+    mapping (uint256 => uint256) orderIdToAssetIdMapping;
+   // mapping (uint256 => userInfo) orderIdToDistributorMapping;
+    //mapping (uint256 => assetDetails) orderToAssetMapping;
     
-    function placeOrder(AssetCategory _assetCategory, uint _qty) public{
+    function placeOrder(AssetCategory _assetCategory, uint _qty) isRegisteredUser(msg.sender) public{
+        
+       
+             orderCount++;
+             //creating a new order
+              order  newOrder;
+             newOrder.orderId=orderCount; //assign an order id here
+           //
+            newOrder.qty=_qty;
+            
+       //if the asset quantity is sufficient then  status is PLACED & contact the supplier & update the assetCategoryToAssetList
+       
+        for(uint256 i=categoryToMinIndex[uint(_assetCategory)] ; i < categoryToMaxIndex[uint(_assetCategory)] ; i++)
+        
+        { 
+             uint256 assetId = assetCategoryToAssetIdList[uint(_assetCategory)][i];
+             assetDetails asset = assetIdToAssetDetailsMapping[assetId];
+             uint difference=_qty - asset.quantity;
+             
+             if(difference>=0) 
+             { orderIdToAssetIdMapping[newOrder.orderId]=asset.assetId;
+               newOrder.assetId= asset.assetId;
+               orderIdToOrderMapping[newOrder.orderId]=newOrder;
+               break;
+             }
+          
+            
+        }  
+          
+        dispense(newOrder.orderId);
+
+    }
+    
+    function dispense(uint256 _orderId) public{
         
     }
     
-    function dispense(uint256 _qty, AssetCategory _assetCategory) public{
-        
-    }
-    
-    function acknowledge(address _distAddress, uint256 orderId){
-        
-    }
-    
-    function fullfillDemand(address _supplierAddress, uint256 orderId){
-        
-    }
+   
     
 }
-
-
