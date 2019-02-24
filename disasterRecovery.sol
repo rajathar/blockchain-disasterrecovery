@@ -131,23 +131,25 @@ contract DisasterRecovery is registration, assetRegistration {
      
     mapping (uint256 => order) orderIdToOrderMapping;
     mapping (uint256 => uint256) orderIdToAssetIdMapping;
-   // mapping (uint256 => userInfo) orderIdToDistributorMapping;
+    // mapping (uint256 => userInfo) orderIdToDistributorMapping;
     //mapping (uint256 => assetDetails) orderToAssetMapping;
     
-    function placeOrder(AssetCategory _assetCategory, uint _qty) isRegisteredUser(msg.sender) public{
+    function placeOrder(AssetCategory _assetCategory, uint _qty) 
+    isRegisteredUser(msg.sender) 
+    public{
         
        
-             orderCount++;
-             //creating a new order
-              order  newOrder;
-             newOrder.orderId=orderCount; //assign an order id here
-           //
-            newOrder.qty=_qty;
+        orderCount++;
+        
+        //creating a new order
+        order  newOrder;
+        //assign an order id here
+        newOrder.orderId=orderCount;
+        newOrder.qty=_qty;
             
-       //if the asset quantity is sufficient then  status is PLACED & contact the supplier & update the assetCategoryToAssetList
+        //if the asset quantity is sufficient then  status is PLACED & contact the supplier & update the assetCategoryToAssetList
        
         for(uint256 i=categoryToMinIndex[uint(_assetCategory)] ; i < categoryToMaxIndex[uint(_assetCategory)] ; i++)
-        
         { 
              uint256 assetId = assetCategoryToAssetIdList[uint(_assetCategory)][i];
              assetDetails asset = assetIdToAssetDetailsMapping[assetId];
