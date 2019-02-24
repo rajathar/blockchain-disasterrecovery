@@ -65,7 +65,11 @@ contract assetRegistration{
     uint256 public maxAssetId = 0;
     
     mapping (uint256 => address) public assetToSupplierDetails;
-    mapping (uint256 => assetDetails[]) public assetCategoryToAssetList; 
+    
+    // Category to Asset Id List Mapping, Food => AssetId 1, AssetId 3
+    mapping (uint256 => uint256[]) public assetCategoryToAssetIdList;
+    
+    mapping (uint256 => assetDetails) public assetIdToAssetDetailsMapping;
     mapping (uint256 => uint256) public assetCategoryToTotalQuantity;
     mapping (uint256 => uint256) public categoryToMinIndex;
     mapping (uint256 => uint256) public categoryToMaxIndex;
@@ -86,11 +90,19 @@ contract assetRegistration{
         newAsset.assetCategory = _assetCategory;
         newAsset.assetName = _assetName;
         newAsset.quantity = _qty;
-        assetCategoryToAssetList[uint(_assetCategory)].push(newAsset);
         
-        assetCategoryToTotalQuantity[uint(_assetCategory)] = assetCategoryToTotalQuantity[uint(_assetCategory)] + _qty;
+        // Asset Id to AssetDetails Map
+        assetIdToAssetDetailsMapping[newAsset.assetId] = newAsset;
         
+        // Category to Asset Id List Mapping, Food => AssetId 1, AssetId 3
+        assetCategoryToAssetIdList[uint(_assetCategory)].push(newAsset.assetId);
+        
+        // Category to Max index, Food => 3 (max array index)
         categoryToMaxIndex[uint(_assetCategory)] = maxAssetId;
+       
+        
+        // Category to Total Quantity , Food => total quantity 100
+        assetCategoryToTotalQuantity[uint(_assetCategory)] = assetCategoryToTotalQuantity[uint(_assetCategory)] + _qty;
         
         maxAssetId = maxAssetId + 1;
         
