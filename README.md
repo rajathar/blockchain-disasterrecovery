@@ -2,7 +2,7 @@
 
 This project provides a simple Smart Contract implementation for Disaster recovery application. 
 
-Problem Statement: During flood or any disaster, Keeping track of all the inventory and ensuring that relief material is provided at ease with accountability is a big challenge. Can you develop a solution which can ensure proper and accountable disbursement happens during any disaster.
+Problem Statement: During any disaster, Keeping track of all the inventory and ensuring that relief material is provided at ease with accountability is a big challenge. Can you develop a solution which can ensure proper and accountable disbursement happens during any disaster.
 
 Understand current systems
 
