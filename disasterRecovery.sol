@@ -66,9 +66,18 @@ contract assetRegistration{
     
     mapping (uint256 => address) public assetToSupplierDetails;
     mapping (uint256 => assetDetails[]) public assetCategoryToAssetList; 
+    mapping (uint256 => uint256) public assetCategoryToTotalQuantity;
+    mapping (uint256 => uint256) public categoryToMinIndex;
+    mapping (uint256 => uint256) public categoryToMaxIndex;
+    
+    // Constructor
+    function assetRegistration() public {
+        categoryToMinIndex[uint(AssetCategory.FOOD)] = 0;
+        categoryToMinIndex[uint(AssetCategory.WATER)] = 0;
+        categoryToMinIndex[uint(AssetCategory.CLOTHES)] = 0;
+    }
     
     function _assetRegister(string _assetName, uint256 _qty, AssetCategory _assetCategory) public{
-        maxAssetId = maxAssetId + 1;
         assetToSupplierDetails[maxAssetId] = msg.sender;
         
         assetDetails newAsset;
@@ -78,6 +87,13 @@ contract assetRegistration{
         newAsset.assetName = _assetName;
         newAsset.quantity = _qty;
         assetCategoryToAssetList[uint(_assetCategory)].push(newAsset);
+        
+        assetCategoryToTotalQuantity[uint(_assetCategory)] = assetCategoryToTotalQuantity[uint(_assetCategory)] + _qty;
+        
+        categoryToMaxIndex[uint(_assetCategory)] = maxAssetId;
+        
+        maxAssetId = maxAssetId + 1;
+        
     }
 }
 
